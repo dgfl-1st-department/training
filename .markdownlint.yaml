@@ -1,0 +1,3 @@
+# MD060: 日本語（CJK）を含むテーブルではアライメント計算が不正確になるため無効化
+# https://github.com/DavidAnson/markdownlint/issues/1869
+MD060: false
