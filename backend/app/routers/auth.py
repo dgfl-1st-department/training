@@ -9,6 +9,7 @@ from app.core.auth_client import oauth
 from app.models.user import User
 from app.models.session import Session as UserSession
 from app.schemas.user import User as UserSchema
+from app.core.audit import log_audit
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -22,19 +23,23 @@ async def callback(request: Request, db: Session = Depends(get_db)):
     try:
         token = await oauth.google.authorize_access_token(request)
     except Exception as e:
+        log_audit(db, "login_fail", details={"reason": "oauth_failed", "error": str(e), "ip": request.client.host})
         raise HTTPException(status_code=400, detail=f"OAuth failed: {str(e)}")
     
     user_info = token.get('userinfo')
     if not user_info:
+        log_audit(db, "login_fail", details={"reason": "no_user_info", "ip": request.client.host})
         raise HTTPException(status_code=400, detail="Failed to get user info from Google")
     
     email = user_info.get('email')
     if not email:
+        log_audit(db, "login_fail", details={"reason": "no_email", "ip": request.client.host})
         raise HTTPException(status_code=400, detail="Email not provided by Google")
     
     # Domain verification
     domain = email.split('@')[-1]
     if settings.ALLOWED_DOMAIN and domain != settings.ALLOWED_DOMAIN:
+        log_audit(db, "login_fail", details={"email": email, "reason": "unauthorized_domain", "ip": request.client.host})
         raise HTTPException(status_code=403, detail="Unauthorized domain")
     
     # Get or Create User
@@ -60,6 +65,8 @@ async def callback(request: Request, db: Session = Depends(get_db)):
     )
     db.add(new_session)
     db.commit()
+    
+    log_audit(db, "login_success", user_id=user.id, details={"ip": request.client.host, "user_agent": request.headers.get("user-agent")})
     
     # Set Cookie and Redirect (Placeholder for Frontend URL)
     response = Response(status_code=status.HTTP_302_FOUND)

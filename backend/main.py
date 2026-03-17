@@ -7,6 +7,9 @@ from app.core.config import settings
 from app.models.department import Department
 from app.models.user import User
 from app.models.session import Session
+from app.models.question import Question
+from app.models.answer import Answer
+from app.models.audit_log import AuditLog
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
