@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 import secrets
 
-from app.core.dependencies import get_db
+from app.core.dependencies import get_db, get_current_user
 from app.core.config import settings
 from app.core.auth_client import oauth
 from app.models.user import User
@@ -11,7 +11,7 @@ from app.models.session import Session as UserSession
 from app.schemas.user import User as UserSchema
 from app.core.audit import log_audit
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 @router.get("/login")
 async def login(request: Request):
@@ -82,16 +82,7 @@ async def callback(request: Request, db: Session = Depends(get_db)):
     return response
 
 @router.get("/me", response_model=UserSchema)
-async def get_me(request: Request, db: Session = Depends(get_db)):
-    session_id = request.cookies.get("session_id")
-    if not session_id:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    
-    session = db.query(UserSession).filter(UserSession.id == session_id).first()
-    if not session or session.expires_at < datetime.now():
-        raise HTTPException(status_code=401, detail="Session expired")
-    
-    user = db.query(User).filter(User.id == session.user_id).first()
+async def get_me(request: Request, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
     return user
 
 @router.post("/logout")
