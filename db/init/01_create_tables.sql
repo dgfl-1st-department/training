@@ -64,6 +64,27 @@ CREATE TABLE audit_logs (
     INDEX idx_action_created (action, created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- 監査ログ改ざん防止トリガー
+DELIMITER //
+
+-- 更新を禁止するトリガー
+CREATE TRIGGER before_update_audit_logs
+BEFORE UPDATE ON audit_logs
+FOR EACH ROW
+BEGIN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Updates are not allowed on audit_logs table';
+END//
+
+-- 削除を禁止するトリガー
+CREATE TRIGGER before_delete_audit_logs
+BEFORE DELETE ON audit_logs
+FOR EACH ROW
+BEGIN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Deletes are not allowed on audit_logs table';
+END//
+
+DELIMITER ;
+
 -- 4.2.6 セッション（sessions）
 CREATE TABLE sessions (
     id VARCHAR(64) PRIMARY KEY,

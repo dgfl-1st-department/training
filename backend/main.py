@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from app.routers import auth
+from app.routers import auth, answers
 from app.core.config import settings
 # Ensure all models are imported so they register with SQLAlchemy Base
 from app.models.department import Department
 from app.models.user import User
 from app.models.session import Session
+from app.models.question import Question
+from app.models.answer import Answer
+from app.models.audit_log import AuditLog
 
 app = FastAPI(title=settings.PROJECT_NAME)
 
@@ -26,7 +29,8 @@ app.add_middleware(
 )
 
 # Include Routers
-app.include_router(auth.router, prefix="/api")
+app.include_router(auth.router)
+app.include_router(answers.router)
 
 @app.get("/")
 async def root():
