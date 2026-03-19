@@ -7,6 +7,8 @@ services:
       - "8000:8000"
     env_file:
       - .env
+    environment:
+      - DATABASE_URL=mysql+pymysql://root:${DB_PASSWORD}@db:3306/webapp_db
     depends_on:
       db:
         condition: service_healthy
@@ -18,6 +20,8 @@ services:
       - /app/node_modules
     ports:
       - "5173:5173"
+    env_file:
+      - .env
     depends_on:
       - backend
 
@@ -28,6 +32,7 @@ services:
     environment:
       - MYSQL_DATABASE=webapp_db
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_HOST=%
     ports:
       - "3306:3306"
     volumes:
