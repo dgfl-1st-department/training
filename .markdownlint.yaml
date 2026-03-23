@@ -1,3 +1,13 @@
 # MD060: 日本語（CJK）を含むテーブルではアライメント計算が不正確になるため無効化
 # https://github.com/DavidAnson/markdownlint/issues/1869
 MD060: false
+
+# MD013: 1行の文字数制限を120文字に緩和（デフォルト80）
+MD013:
+  line_length: 120
+  tables: false
+  code_blocks: false
+
+# MD024: 同じ階層のリンクを参照する場合は親リンクのみを使用
+MD024:
+  siblings_only: true
