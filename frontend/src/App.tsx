@@ -3,7 +3,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import AnswerInput from './pages/AnswerInput';
+import AnswerHistory from './pages/AnswerHistory';
 import SummaryDashboard from './pages/SummaryDashboard';
 
 const AppRoutes = () => {
@@ -15,12 +16,12 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      {/* 未認証時のみアクセス可能。認証済みならダッシュボードへ */}
+      {/* 未認証時のみアクセス可能。認証済みなら権限に応じた画面へ */}
       <Route
         path="/"
         element={
           user ? (
-            <Navigate to={user.role === 'admin' ? '/admin' : '/dashboard'} replace />
+            <Navigate to={user.role === 'admin' ? '/admin' : '/answer'} replace />
           ) : (
             <Login />
           )
@@ -29,11 +30,11 @@ const AppRoutes = () => {
 
       {/* 従業員専用ルート */}
       <Route
-        path="/dashboard"
+        path="/answer"
         element={
           <ProtectedRoute allowedRoles={['employee', 'admin']}>
             <Layout>
-              <Dashboard />
+              <AnswerInput />
             </Layout>
           </ProtectedRoute>
         }
@@ -71,10 +72,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <div className="card-base dashboard-container">
-                <h2>回答履歴画面 (準備中)</h2>
-                <p>設計書 3.3.3 に基づく実装がここに入ります。</p>
-              </div>
+              <AnswerHistory />
             </Layout>
           </ProtectedRoute>
         }

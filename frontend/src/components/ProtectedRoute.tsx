@@ -21,8 +21,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    // 権限がない場合は、適切なダッシュボードへリダイレクト
-    return <Navigate to={user.role === 'admin' ? '/admin' : '/dashboard'} replace />;
+    // 権限がない場合は、適切な画面へリダイレクト
+    return <Navigate to={user.role === 'admin' ? '/admin' : '/answer'} replace />;
   }
 
   return <>{children}</>;
