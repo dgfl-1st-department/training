@@ -3,7 +3,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import AnswerInput from './pages/AnswerInput';
+import AnswerHistory from './pages/AnswerHistory';
 import SummaryDashboard from './pages/SummaryDashboard';
 
 const AppRoutes = () => {
@@ -33,7 +34,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={['employee', 'admin']}>
             <Layout>
-              <Dashboard />
+              <AnswerInput />
             </Layout>
           </ProtectedRoute>
         }
@@ -71,10 +72,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Layout>
-              <div className="card-base dashboard-container">
-                <h2>回答履歴画面 (準備中)</h2>
-                <p>設計書 3.3.3 に基づく実装がここに入ります。</p>
-              </div>
+              <AnswerHistory />
             </Layout>
           </ProtectedRoute>
         }

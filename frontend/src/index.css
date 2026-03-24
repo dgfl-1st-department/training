@@ -359,3 +359,247 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
 }
+
+.save-button:disabled {
+  background-color: #d1d5db;
+  color: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  opacity: 0.7;
+}
+
+.save-button:disabled:hover {
+  background-color: #d1d5db;
+  transform: none;
+}
+
+/* Answer Components Styles */
+.alert-error {
+  background-color: #fee2e2;
+  color: #dc2626;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border: 1px solid #fecaca;
+  font-size: 0.875rem;
+}
+
+.alert-success {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 0.875rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background-color: #10b981;
+  width: 100%;
+  animation: shrink 3s linear forwards;
+}
+
+@keyframes shrink {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+.form-item-date {
+  max-width: 200px;
+}
+
+.form-date-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.form-date-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  background-color: var(--card-bg);
+  color: var(--text-main);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: all 0.2s ease;
+}
+
+.form-date-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.form-date-input:disabled {
+  background-color: var(--bg-color);
+  color: var(--text-muted);
+  border-color: var(--border-color);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.questions-container {
+  margin-top: 32px;
+}
+
+.question-item {
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+
+.question-text {
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 1.3rem;
+}
+
+.required-star {
+  color: #ef4444;
+  font-size: 0.875rem;
+}
+
+.rating-label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+.rating-input {
+  margin-right: 6px;
+}
+
+.free-text-container {
+  margin-top: 16px;
+}
+
+.free-text-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.free-text-area {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  min-height: 80px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.free-text-area:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+/* Answer History Styles */
+.filter-form {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.filter-input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.table-header-row {
+  background-color: #f9fafb;
+  text-align: left;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.table-header-cell {
+  padding: 16px;
+  font-weight: 600;
+}
+
+.table-body-row {
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s;
+}
+
+.table-body-row:hover {
+  background-color: #f9fafb;
+}
+
+.table-body-cell {
+  padding: 16px;
+}
+
+.edit-button {
+  padding: 6px 12px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  transition: all 0.2s;
+}
+
+.edit-button:hover {
+  background-color: #dbeafe;
+  border-color: #93c5fd;
+}
+
+.text-error {
+  color: #ef4444;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
