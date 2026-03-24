@@ -101,7 +101,7 @@ const AnswerHistory: React.FC = () => {
                   <td className="table-body-cell">{item.count}件</td>
                   <td className="table-body-cell">
                     <button
-                      onClick={() => navigate(`/dashboard?date=${item.date}`)}
+                      onClick={() => navigate(`/answer?date=${item.date}`)}
                       className="edit-button"
                     >
                       編集

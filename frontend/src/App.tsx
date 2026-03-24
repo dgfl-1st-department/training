@@ -16,12 +16,12 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      {/* 未認証時のみアクセス可能。認証済みならダッシュボードへ */}
+      {/* 未認証時のみアクセス可能。認証済みなら権限に応じた画面へ */}
       <Route
         path="/"
         element={
           user ? (
-            <Navigate to={user.role === 'admin' ? '/admin' : '/dashboard'} replace />
+            <Navigate to={user.role === 'admin' ? '/admin' : '/answer'} replace />
           ) : (
             <Login />
           )
@@ -30,7 +30,7 @@ const AppRoutes = () => {
 
       {/* 従業員専用ルート */}
       <Route
-        path="/dashboard"
+        path="/answer"
         element={
           <ProtectedRoute allowedRoles={['employee', 'admin']}>
             <Layout>

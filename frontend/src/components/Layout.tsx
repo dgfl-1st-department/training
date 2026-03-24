@@ -20,7 +20,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </span>
             {user && (
               <nav className="nav">
-                <button onClick={() => navigate('/dashboard')}>回答入力</button>
+                <button onClick={() => navigate('/answer')}>回答入力</button>
                 <button onClick={() => navigate('/history')}>回答履歴</button>
                 {user.role === 'admin' && (
                   <>
