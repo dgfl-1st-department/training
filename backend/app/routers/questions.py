@@ -26,7 +26,7 @@ async def get_questions(
     return questions
 
 # GET /api/admin/questions 質問一覧取得（全件）
-@router.get("/api/admin/questions", response_model=List[QuestionResponse])
+@router.get("/admin/questions", response_model=List[QuestionResponse])
 async def get_questions(
     request: Request,
     db: Session = Depends(get_db),
