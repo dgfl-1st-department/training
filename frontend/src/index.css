@@ -575,6 +575,10 @@ body {
   width: 20px;
 }
 
+.table-header-cell.sort_order {
+  width: 10px;
+}
+
 .table-header-cell.actions {
   min-width: 270px;
   padding: 16px;

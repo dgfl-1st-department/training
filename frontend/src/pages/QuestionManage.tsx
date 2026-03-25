@@ -83,6 +83,9 @@ const SortableRow: React.FC<SortableRowProps> = ({ question, onEdit, onTogglePub
         </span>
       </td>
       <td className="table-body-cell">
+        {question.sort_order}
+      </td>
+      <td className="table-body-cell">
         <div className="table-actions">
           <button onClick={() => onEdit(question)} className="edit-button">編集</button>
           <button onClick={() => onTogglePublish(question.id, question.is_public)} className="toggle-publish-button">
@@ -317,6 +320,7 @@ const QuestionManage: React.FC = () => {
                   <th className="table-header-cell">カテゴリ</th>
                   <th className="table-header-cell">質問文</th>
                   <th className="table-header-cell is_public">公開</th>
+                  <th className="table-header-cell sort_order">順</th>
                   <th className="table-header-cell actions">操作</th>
                 </tr>
               </thead>
