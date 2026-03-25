@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import Login from './pages/Login';
 import AnswerInput from './pages/AnswerInput';
 import AnswerHistory from './pages/AnswerHistory';
+import QuestionManage from './pages/QuestionManage';
 import SummaryDashboard from './pages/SummaryDashboard';
 
 const AppRoutes = () => {
@@ -46,10 +47,7 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={['admin']}>
             <Layout>
-              <div className="card-base dashboard-container">
-                <h2>質問管理画面 (管理者ダミー)</h2>
-                <p>バックエンドから取得した実際のロールに基づき、ここにアクセスしています。</p>
-              </div>
+              <QuestionManage />
             </Layout>
           </ProtectedRoute>
         }
