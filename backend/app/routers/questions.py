@@ -60,7 +60,8 @@ async def create_question(
 
     # 新規登録
     new_question = Question(
-        measurement_category=payload.measurement_category,
+        category=payload.category,
+        answer_type=payload.answer_type,
         text=payload.text,
         is_public=payload.is_public,
         sort_order=payload.sort_order,
@@ -105,7 +106,7 @@ async def bulk_update_question_reorder(
 
 @router.put("/admin/questions/{question_id}", response_model=QuestionResponse)
 async def update_question(
-    question_id: int,
+    question_id: str,
     payload: QuestionUpdate,
     request: Request,
     db: Session = Depends(get_db),
@@ -126,8 +127,10 @@ async def update_question(
             detail="質問が見つかりません",
         )
 
-    if payload.measurement_category is not None:
-        question.measurement_category = payload.measurement_category
+    if payload.category is not None:
+        question.category = payload.category
+    if payload.answer_type is not None:
+        question.answer_type = payload.answer_type
     if payload.text is not None:
         question.text = payload.text
     if payload.is_public is not None:
@@ -145,7 +148,7 @@ async def update_question(
 
 @router.delete("/admin/questions/{question_id}", response_model=QuestionResponse)
 async def delete_question(
-    question_id: int,
+    question_id: str,
     request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -174,7 +177,7 @@ async def delete_question(
 
 @router.patch("/admin/questions/{question_id}/visibility", response_model=QuestionResponse)
 async def update_question_visibility(
-    question_id: int,
+    question_id: str,
     payload: QuestionVisibilityUpdate,
     request: Request,
     db: Session = Depends(get_db),
