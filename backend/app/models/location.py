@@ -3,8 +3,8 @@ from sqlalchemy.sql import func
 from app.core.database import Base
 from app.core.ulid import BinaryULID, generate_ulid
 
-class Department(Base):
-    __tablename__ = "departments"
+class Location(Base):
+    __tablename__ = "locations"
 
     id = Column(BinaryULID, primary_key=True, default=generate_ulid)
     name = Column(String(100), nullable=False)

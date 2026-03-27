@@ -6,10 +6,12 @@ class UserBase(BaseModel):
     email: EmailStr
     name: Optional[str] = None
     role: str
-    department_id: Optional[int] = None
+    department_id: Optional[str] = None
+    location_id: Optional[str] = None
 
 class User(UserBase):
-    id: int
+    id: str
+    onboarding_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
 
@@ -17,7 +19,7 @@ class User(UserBase):
         from_attributes = True
 
 class SessionBase(BaseModel):
-    user_id: int
+    user_id: str
     expires_at: datetime
 
 class Session(SessionBase):

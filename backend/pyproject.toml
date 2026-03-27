@@ -15,5 +15,6 @@ dependencies = [
     "pymysql>=1.1.2",
     "python-dotenv>=1.2.2",
     "sqlalchemy>=2.0.48",
+    "python-ulid>=3.0.0",
     "uvicorn>=0.41.0",
 ]
