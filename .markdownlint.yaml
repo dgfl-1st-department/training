@@ -1,6 +1,9 @@
-# MD060: 日本語（CJK）を含むテーブルではアライメント計算が不正確になるため無効化
+# MD060: CJK 混在テーブルで aligned の誤検知があるため無効化。
+# 要件定義書などは compact 形式（列パディングなし、| --- | 区切り）で記載すること。
 # https://github.com/DavidAnson/markdownlint/issues/1869
-MD060: false
+MD060:
+  enabled: false
+  style: compact
 
 # MD013: 1行の文字数制限を120文字に緩和（デフォルト80）
 MD013:
