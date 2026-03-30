@@ -4,6 +4,7 @@ from sqlalchemy.types import TypeDecorator
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 from app.core.security import security
+from app.core.ulid import BinaryULID, generate_ulid
 
 class EncryptedText(TypeDecorator):
     # 保存時に暗号化し、取得時に復号化する型
@@ -22,9 +23,9 @@ class EncryptedText(TypeDecorator):
 class Answer(Base):
     __tablename__ = "answers"
 
-    id = Column(BigInteger, primary_key=True, index=True)
-    user_id = Column(BigInteger, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    question_id = Column(BigInteger, ForeignKey("questions.id", ondelete="CASCADE"), nullable=False)
+    id = Column(BinaryULID, primary_key=True, default=generate_ulid)
+    user_id = Column(BinaryULID, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    question_id = Column(BinaryULID, ForeignKey("questions.id", ondelete="CASCADE"), nullable=False)
     answer_date = Column(Date, nullable=False)
     rating = Column(SmallInteger)
     free_text = Column(EncryptedText) # 暗号化カスタム型を使用

@@ -94,7 +94,7 @@ async def create_answers(
 
 @router.put("/{answer_id}", response_model=AnswerResponse)
 async def update_answer(
-    answer_id: int,
+    answer_id: str,
     payload: AnswerUpdate,
     request: Request,
     db: Session = Depends(get_db),

@@ -5,7 +5,7 @@ from typing import Optional, Any, Dict
 def log_audit(
     db: Session,
     action: str,
-    user_id: Optional[int] = None,
+    user_id: Optional[str] = None,
     resource_type: Optional[str] = None,
     resource_id: Optional[str] = None,
     details: Optional[Dict[str, Any]] = None

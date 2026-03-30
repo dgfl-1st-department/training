@@ -1,15 +1,24 @@
 from pydantic import BaseModel, field_validator, Field
 from typing import Optional, List
-from datetime import date, datetime
+from datetime import datetime
 from enum import Enum
 
-class MeasurementCategory(str, Enum):
-    SATISFACTION = "satisfaction"
+class Category(str, Enum):
+    WORK = "work"
     RELATIONSHIP = "relationship"
     HEALTH = "health"
 
+class AnswerType(str, Enum):
+    RATING = "rating"
+    FREE = "free"
+
+class AnswerType(str, Enum):
+    RATING = "rating"
+    FREE = "free"
+
 class QuestionItemCreate(BaseModel):
-    measurement_category: MeasurementCategory
+    category: Category
+    answer_type: AnswerType = AnswerType.RATING
     text: str = Field(..., max_length=500)
     is_public: bool = True
     sort_order: int = Field(0, ge=0) # 0以上
@@ -22,7 +31,8 @@ class QuestionItemCreate(BaseModel):
         return value
 
 class QuestionUpdate(BaseModel):
-    measurement_category: Optional[MeasurementCategory] = None
+    category: Optional[Category] = None
+    answer_type: Optional[AnswerType] = None
     text: Optional[str] = Field(None, max_length=500)
     is_public: Optional[bool] = None
     sort_order: Optional[int] = Field(None, ge=0)
@@ -38,7 +48,7 @@ class QuestionVisibilityUpdate(BaseModel):
     is_public: bool
 
 class QuestionSortOrder(BaseModel):
-    id: int
+    id: str
     sort_order: int = Field(..., ge=0)
 
     @field_validator("sort_order")
@@ -52,8 +62,9 @@ class QuestionBulkReorderPayload(BaseModel):
     orders: List[QuestionSortOrder]
 
 class QuestionResponse(BaseModel):
-    id: int
-    measurement_category: MeasurementCategory
+    id: str
+    category: Category
+    answer_type: AnswerType
     text: str = Field(..., max_length=500)
     is_public: bool = True
     sort_order: int = Field(0, ge=0) # 0以上

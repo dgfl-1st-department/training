@@ -26,11 +26,12 @@ import {
   patchPublishQuestion,
   reorderQuestions,
   Question,
-  QuestionCreate
+  QuestionCreate,
+  QuestionCategory,
 } from '../services/api';
 
 const CATEGORY_LABELS: Record<string, string> = {
-  satisfaction: "満足度",
+  work: "仕事",
   relationship: "人間関係",
   health: "健康状態",
 };
@@ -38,8 +39,8 @@ const CATEGORY_LABELS: Record<string, string> = {
 interface SortableRowProps {
   question: Question;
   onEdit: (q: Question) => void;
-  onTogglePublish: (id: number, status: boolean) => void;
-  onDelete: (id: number) => void;
+  onTogglePublish: (id: string, status: boolean) => void;
+  onDelete: (id: string) => void;
 }
 
 const SortableRow: React.FC<SortableRowProps> = ({ question, onEdit, onTogglePublish, onDelete }) => {
@@ -72,8 +73,8 @@ const SortableRow: React.FC<SortableRowProps> = ({ question, onEdit, onTogglePub
         <span style={{ cursor: 'grab', color: '#9ca3af', fontSize: '1.2rem' }}>⠿</span>
       </td>
       <td className="table-body-cell">
-        <span className={`category-tag ${question.measurement_category}`}>
-          {CATEGORY_LABELS[question.measurement_category]}
+        <span className={`category-tag ${question.category}`}>
+          {CATEGORY_LABELS[question.category] ?? question.category}
         </span>
       </td>
       <td className="table-body-cell">{question.text}</td>
@@ -106,7 +107,7 @@ const QuestionManage: React.FC = () => {
 
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [formData, setFormData] = useState<QuestionCreate>({
-    measurement_category: "satisfaction",
+    category: "work",
     text: "",
     is_public: true,
     sort_order: 0,
@@ -147,7 +148,7 @@ const QuestionManage: React.FC = () => {
     if (question) {
       setEditingQuestion(question);
       setFormData({
-        measurement_category: question.measurement_category,
+        category: question.category,
         text: question.text,
         is_public: question.is_public,
         sort_order: question.sort_order,
@@ -155,7 +156,7 @@ const QuestionManage: React.FC = () => {
     } else {
       setEditingQuestion(null);
       setFormData({
-        measurement_category: "satisfaction",
+        category: "work",
         text: "",
         is_public: true,
         sort_order: questions.length,
@@ -192,7 +193,7 @@ const QuestionManage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm("本当に削除しますか？")) return;
     try {
       await deleteQuestion(id);
@@ -202,7 +203,7 @@ const QuestionManage: React.FC = () => {
     }
   };
 
-  const handleTogglePublish = async (id: number, currentStatus: boolean) => {
+  const handleTogglePublish = async (id: string, currentStatus: boolean) => {
     try {
       await patchPublishQuestion(id, !currentStatus);
       setQuestions(prev => prev.map(q => q.id === id ? { ...q, is_public: !currentStatus } : q));
@@ -220,13 +221,13 @@ const QuestionManage: React.FC = () => {
       const newIndex = questions.findIndex((q) => q.id === over.id);
 
       const newQuestions = arrayMove(questions, oldIndex, newIndex);
-      const reorderedQuestions = newQuestions.map((q, idx) => ({ ...q, sort_order: idx }));
+      const reorderedQuestions = newQuestions.map((q: Question, idx: number) => ({ ...q, sort_order: idx }));
 
       setQuestions(reorderedQuestions);
 
       try {
         await reorderQuestions({
-          orders: reorderedQuestions.map(q => ({ id: q.id, sort_order: q.sort_order }))
+          orders: reorderedQuestions.map((q: Question) => ({ id: q.id, sort_order: q.sort_order }))
         });
       } catch (err) {
         console.error('Failed to reorder:', err);
@@ -268,8 +269,8 @@ const QuestionManage: React.FC = () => {
               <label>カテゴリー</label>
               <select
                 className="form-select"
-                value={formData.measurement_category}
-                onChange={(e) => setFormData({ ...formData, measurement_category: e.target.value })}
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value as QuestionCategory })}
               >
                 {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
                   <option key={key} value={key}>{label}</option>

@@ -4,7 +4,7 @@ from datetime import date, datetime
 
 
 class AnswerItemCreate(BaseModel):
-    question_id: int
+    question_id: str
     rating: Optional[int] = None
     free_text: Optional[str] = None
 
@@ -41,9 +41,9 @@ class AnswerUpdate(BaseModel):
 
 
 class AnswerResponse(BaseModel):
-    id: int
-    user_id: int
-    question_id: int
+    id: str
+    user_id: str
+    question_id: str
     answer_date: date
     rating: Optional[int] = None
     free_text: Optional[str] = None

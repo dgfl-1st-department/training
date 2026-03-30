@@ -13,23 +13,26 @@ export interface User {
   department_id: number | null;
 }
 
+/** バックエンドの Category enum（work / relationship / health）に合わせる */
+export type QuestionCategory = 'work' | 'relationship' | 'health';
+
 export interface Question {
-  id: number;
-  measurement_category: string;
+  id: string;
+  category: QuestionCategory;
   text: string;
   is_public: boolean;
   sort_order: number;
 }
 
 export interface QuestionCreate {
-  measurement_category: string;
+  category: QuestionCategory;
   text: string;
   is_public: boolean;
   sort_order: number;
 }
 
 export interface QuestionSortOrder {
-  id: number;
+  id: string;
   sort_order: number;
 }
 
@@ -38,16 +41,16 @@ export interface QuestionBulkReorderPayload {
 }
 
 export interface Answer {
-  id: number;
-  user_id: number;
-  question_id: number;
+  id: string;
+  user_id: string;
+  question_id: string;
   answer_date: string;
   rating: number | null;
   free_text: string | null;
 }
 
 export interface AnswerCreate {
-  question_id: number;
+  question_id: string;
   rating: number | null;
   free_text: string | null;
 }
@@ -77,27 +80,26 @@ export const getAdminQuestions = async (): Promise<Question[]> => {
 };
 
 export const createQuestion = async (payload: QuestionCreate): Promise<Question> => {
-  console.log(payload);
   const response = await api.post<Question>('/admin/questions', payload);
   return response.data;
 };
 
-export const updateQuestion = async (id: number, payload: QuestionCreate): Promise<Question> => {
+export const updateQuestion = async (id: string, payload: QuestionCreate): Promise<Question> => {
   const response = await api.put<Question>(`/admin/questions/${id}`, payload);
   return response.data;
 };
 
-export const deleteQuestion = async (id: number): Promise<void> => {
+export const deleteQuestion = async (id: string): Promise<void> => {
   await api.delete(`/admin/questions/${id}`);
 };
 
-export const patchPublishQuestion = async (id: number, is_public: boolean): Promise<Question> => {
+export const patchPublishQuestion = async (id: string, is_public: boolean): Promise<Question> => {
   const response = await api.patch<Question>(`/admin/questions/${id}/visibility`, { is_public });
   return response.data;
 };
 
-export const reorderQuestions = async (payload: QuestionBulkReorderPayload): Promise<{ message: string; updated_ids: number[] }> => {
-  const response = await api.put<{ message: string; updated_ids: number[] }>('/admin/questions/reorder', payload);
+export const reorderQuestions = async (payload: QuestionBulkReorderPayload): Promise<{ message: string; updated_ids: string[] }> => {
+  const response = await api.put<{ message: string; updated_ids: string[] }>('/admin/questions/reorder', payload);
   return response.data;
 };
 
@@ -114,7 +116,7 @@ export const createAnswers = async (payload: AnswersBulkCreate): Promise<Answer[
   return response.data;
 };
 
-export const updateAnswer = async (id: number, rating: number | null, freeText: string | null): Promise<Answer> => {
+export const updateAnswer = async (id: string, rating: number | null, freeText: string | null): Promise<Answer> => {
   const response = await api.put<Answer>(`/answers/${id}`, { rating, free_text: freeText });
   return response.data;
 };
