@@ -1,12 +1,16 @@
 from pydantic import BaseModel, field_validator, Field
 from typing import Optional, List
-from datetime import date, datetime
+from datetime import datetime
 from enum import Enum
 
 class Category(str, Enum):
     WORK = "work"
     RELATIONSHIP = "relationship"
     HEALTH = "health"
+
+class AnswerType(str, Enum):
+    RATING = "rating"
+    FREE = "free"
 
 class AnswerType(str, Enum):
     RATING = "rating"

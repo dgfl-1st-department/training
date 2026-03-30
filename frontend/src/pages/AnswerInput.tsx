@@ -11,7 +11,7 @@ const AnswerInput: React.FC = () => {
   const [answerDate, setAnswerDate] = useState<string>(
     dateParam || new Date().toISOString().split('T')[0]
   );
-  const [answers, setAnswers] = useState<Record<number, AnswerCreate>>({});
+  const [answers, setAnswers] = useState<Record<string, AnswerCreate>>({});
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -48,7 +48,7 @@ const AnswerInput: React.FC = () => {
             return {
               id: ans.question_id,
               text: '（現在非公開、または取得できない質問内容です）',
-              measurement_category: 'satisfaction',
+              category: 'work',
               is_public: false,
               sort_order: 999,
               is_missing: true
@@ -59,7 +59,7 @@ const AnswerInput: React.FC = () => {
           displayQuestions.sort((a: any, b: any) => a.sort_order - b.sort_order);
           setQuestions(displayQuestions);
 
-          const initialAnswers: Record<number, AnswerCreate> = {};
+          const initialAnswers: Record<string, AnswerCreate> = {};
           existingAnswersData.forEach(ans => {
             initialAnswers[ans.question_id] = {
               question_id: ans.question_id,
@@ -72,7 +72,7 @@ const AnswerInput: React.FC = () => {
           // 新規作成モード：すべての公開中質問を表示
           setQuestions(questionsData.sort((a, b) => a.sort_order - b.sort_order));
 
-          const initialAnswers: Record<number, AnswerCreate> = {};
+          const initialAnswers: Record<string, AnswerCreate> = {};
           questionsData.forEach(q => {
             initialAnswers[q.id] = {
               question_id: q.id,
@@ -108,14 +108,14 @@ const AnswerInput: React.FC = () => {
     }
   };
 
-  const handleRatingChange = (questionId: number, rating: number) => {
+  const handleRatingChange = (questionId: string, rating: number) => {
     setAnswers(prev => ({
       ...prev,
       [questionId]: { ...prev[questionId], rating }
     }));
   };
 
-  const handleTextChange = (questionId: number, text: string) => {
+  const handleTextChange = (questionId: string, text: string) => {
     setAnswers(prev => ({
       ...prev,
       [questionId]: { ...prev[questionId], free_text: text }
