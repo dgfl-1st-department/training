@@ -1,5 +1,6 @@
 CREATE DATABASE IF NOT EXISTS webapp_db;
 USE webapp_db;
+SET NAMES utf8mb4;
 
 -- 4.2.1 部署（departments）
 CREATE TABLE departments (
