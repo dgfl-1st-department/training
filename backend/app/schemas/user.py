@@ -20,6 +20,10 @@ class UserBulkUpdatePayload(BaseModel):
     user_ids: list[str]
     updates: UserUpdate
 
+class OnboardingUpdate(BaseModel):
+    department_id: str
+    location_id: str
+
 class User(UserBase):
     id: str
     onboarding_at: Optional[datetime] = None

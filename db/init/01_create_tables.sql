@@ -127,3 +127,7 @@ CREATE TABLE sessions (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_expires_at (expires_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 初期データ
+INSERT INTO departments (id, name) VALUES (UUID_TO_BIN(UUID()), '開発部');
+INSERT INTO locations (id, name) VALUES (UUID_TO_BIN(UUID()), '札幌');

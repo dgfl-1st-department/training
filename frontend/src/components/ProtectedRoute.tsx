@@ -4,10 +4,11 @@ import { useAuth } from '../contexts/AuthContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  allowedRoles?: ('employee' | 'admin')[];
+  allowedRoles?: ('employee' | 'manager' | 'admin')[];
+  allowOnboarding?: boolean;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles }) => {
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles, allowOnboarding = false }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
 
@@ -20,9 +21,15 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
+  // オンボーディング未完了の場合はオンボーディング画面へ
+  if (!user.onboarding_at && !allowOnboarding && location.pathname !== '/onboarding') {
+    return <Navigate to="/onboarding" replace />;
+  }
+
   if (allowedRoles && !allowedRoles.includes(user.role)) {
     // 権限がない場合は、適切な画面へリダイレクト
-    return <Navigate to={user.role === 'admin' ? '/admin' : '/answer'} replace />;
+    const target = user.role === 'admin' ? '/admin/settings' : user.role === 'manager' ? '/admin' : '/answer';
+    return <Navigate to={target} replace />;
   }
 
   return <>{children}</>;

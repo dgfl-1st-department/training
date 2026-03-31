@@ -8,6 +8,7 @@ import AnswerHistory from './pages/AnswerHistory';
 import QuestionManage from './pages/QuestionManage';
 import SummaryDashboard from './pages/SummaryDashboard';
 import AdminSettings from './pages/AdminSettings';
+import FirstAccess from './pages/FirstAccess';
 
 const AppRoutes = () => {
   const { user, loading } = useAuth();
@@ -85,6 +86,15 @@ const AppRoutes = () => {
             <Layout>
               <AnswerHistory />
             </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/onboarding"
+        element={
+          <ProtectedRoute allowOnboarding={true}>
+            <FirstAccess />
           </ProtectedRoute>
         }
       />

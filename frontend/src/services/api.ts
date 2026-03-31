@@ -225,4 +225,9 @@ export const updateAdminUser = async (id: string, payload: UserUpdatePayload): P
   return response.data;
 };
 
+export const patchOnboarding = async (department_id: string, location_id: string): Promise<User> => {
+  const response = await api.patch<User>('/onboarding', { department_id, location_id });
+  return response.data;
+};
+
 export default api;
