@@ -27,11 +27,11 @@ async def get_admin_departments(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    # 権限チェック：システム管理者のみアクセス可能
-    if current_user.role != "admin":
+    # 権限チェック：管理者のみアクセス可能
+    if current_user.role not in ["manager", "admin"]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="システム管理者のみアクセス可能です",
+            detail="管理者のみアクセス可能です",
         )
     
     departments =  db.query(Department).filter(Department.deleted_at == None).all()
