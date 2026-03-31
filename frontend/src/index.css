@@ -9,7 +9,7 @@
   --text-muted: #6b7280;
   --card-bg: #ffffff;
   --border-color: #e5e7eb;
-  --container-max-width: 1000px;
+  --container-max-width: 1200px;
   --border-radius: 12px;
 }
 
@@ -61,8 +61,8 @@ body {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
+  gap: 16px;
+  flex-wrap: nowrap;
 }
 
 .logo {
@@ -78,8 +78,8 @@ body {
 
 .nav {
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
+  gap: 2px;
+  flex-wrap: nowrap;
 }
 
 .nav button {
@@ -88,10 +88,10 @@ body {
   color: var(--text-muted);
   font-weight: 500;
   cursor: pointer;
-  padding: 8px 12px;
+  padding: 8px 10px;
   border-radius: 6px;
   transition: all 0.2s;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
 .nav button:hover {
@@ -743,7 +743,7 @@ input[type="text"]:focus {
 }
 
 .modal-save-button {
-  padding: 6px 12px;
+  padding: 6px 16px;
   background-color: var(--primary-color);
   color: white;
   border: none;
@@ -752,6 +752,8 @@ input[type="text"]:focus {
   font-weight: 500;
   font-size: 0.8125rem;
   transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .modal-save-button:hover {
@@ -848,4 +850,124 @@ input[type="text"]:focus {
 .draggable-row.dragging {
   opacity: 0.5;
   background-color: #f3f4f6;
+}
+
+/* Admin Tab Styles */
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-tab {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--text-muted);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.admin-tab:hover {
+  color: var(--primary-color);
+  background-color: rgba(79, 70, 229, 0.05);
+}
+
+.admin-tab.active {
+  border-bottom-color: var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-card {
+  padding: 24px;
+  background: white;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.admin-card h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  color: var(--text-main);
+  border-left: 4px solid var(--primary-color);
+  padding-left: 12px;
+}
+
+.input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.badge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.badge-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  border: 1px solid var(--border-color);
+}
+
+.badge-remove {
+  border: none;
+  background: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.badge-remove:hover {
+  color: #dc2626;
+}
+
+/* Layout for Management Tables (Department & Location) to align columns */
+.org-table {
+  table-layout: fixed;
+}
+
+
+.col-name {
+  width: 40%;
+}
+
+.col-middle {
+  width: 30%;
+}
+
+.col-actions {
+  width: 30%;
+  min-width: 180px;
+}
+
+.table-body-cell.col-actions .table-actions {
+  justify-content: flex-start;
 }

@@ -9,11 +9,23 @@ class UserBase(BaseModel):
     department_id: Optional[str] = None
     location_id: Optional[str] = None
 
+class UserUpdate(BaseModel):
+    name: Optional[str] = None
+    role: Optional[str] = None
+    department_id: Optional[str] = None
+    location_id: Optional[str] = None
+    is_active: Optional[bool] = None
+
+class UserBulkUpdatePayload(BaseModel):
+    user_ids: list[str]
+    updates: UserUpdate
+
 class User(UserBase):
     id: str
     onboarding_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
+    deleted_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True

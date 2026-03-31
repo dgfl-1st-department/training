@@ -22,19 +22,25 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <nav className="nav">
                 <button onClick={() => navigate('/answer')}>回答入力</button>
                 <button onClick={() => navigate('/history')}>回答履歴</button>
-                {user.role === 'admin' && (
+                {((user.role === 'manager') || (user.role === 'admin')) && (
                   <>
                     <button onClick={() => navigate('/admin')}>質問管理</button>
                     <button onClick={() => navigate('/admin/summary')}>集計ダッシュボード</button>
                   </>
                 )}
+                {user.role === 'admin' && (
+                  <>
+                    <button onClick={() => navigate('/admin/settings')}>システム設定</button>
+                  </>
+                )}
+
               </nav>
             )}
           </div>
           {user && (
             <div className="header-right">
               <span className="user-name">
-                [{user.role === 'admin' ? '管理者' : '従業員'}] {user.name || user.email}
+                [{user.role === 'admin' ? 'システム管理者' : user.role === 'manager' ? '管理者' : '従業員'}] {user.name || user.email}
               </span>
               <button className="logout-button" onClick={logout}>ログアウト</button>
             </div>

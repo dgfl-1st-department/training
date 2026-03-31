@@ -7,6 +7,7 @@ import AnswerInput from './pages/AnswerInput';
 import AnswerHistory from './pages/AnswerHistory';
 import QuestionManage from './pages/QuestionManage';
 import SummaryDashboard from './pages/SummaryDashboard';
+import AdminSettings from './pages/AdminSettings';
 
 const AppRoutes = () => {
   const { user, loading } = useAuth();
@@ -22,7 +23,7 @@ const AppRoutes = () => {
         path="/"
         element={
           user ? (
-            <Navigate to={user.role === 'admin' ? '/admin' : '/answer'} replace />
+            <Navigate to={user.role === 'admin' ? '/admin/settings' : user.role === 'manager' ? '/admin' : '/answer'} replace />
           ) : (
             <Login />
           )
@@ -33,7 +34,7 @@ const AppRoutes = () => {
       <Route
         path="/answer"
         element={
-          <ProtectedRoute allowedRoles={['employee', 'admin']}>
+          <ProtectedRoute allowedRoles={['employee', 'manager', 'admin']}>
             <Layout>
               <AnswerInput />
             </Layout>
@@ -45,7 +46,7 @@ const AppRoutes = () => {
       <Route
         path="/admin"
         element={
-          <ProtectedRoute allowedRoles={['admin']}>
+          <ProtectedRoute allowedRoles={['manager', 'admin']}>
             <Layout>
               <QuestionManage />
             </Layout>
@@ -56,7 +57,7 @@ const AppRoutes = () => {
       <Route
         path="/admin/summary"
         element={
-          <ProtectedRoute allowedRoles={['admin']}>
+          <ProtectedRoute allowedRoles={['manager', 'admin']}>
             <Layout>
               <SummaryDashboard />
             </Layout>
@@ -64,7 +65,19 @@ const AppRoutes = () => {
         }
       />
 
-      {/* 共通のダミー画面 */}
+      {/* システム管理者専用ルート */}
+      <Route
+        path="/admin/settings"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <Layout>
+              <AdminSettings />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* 共通画面 */}
       <Route
         path="/history"
         element={

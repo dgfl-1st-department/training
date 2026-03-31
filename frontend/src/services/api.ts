@@ -6,11 +6,16 @@ const api = axios.create({
 });
 
 export interface User {
-  id: number;
+  id: string;
   email: string;
   name: string | null;
-  role: 'employee' | 'admin';
-  department_id: number | null;
+  role: 'employee' | 'manager' | 'admin';
+  department_id: string | null;
+  location_id: string | null;
+  onboarding_at: string | null;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
 }
 
 /** バックエンドの Category enum（work / relationship / health）に合わせる */
@@ -58,6 +63,33 @@ export interface AnswerCreate {
 export interface AnswersBulkCreate {
   answer_date: string;
   answers: AnswerCreate[];
+}
+
+export interface Location {
+  id: string;
+  name: string;
+  deleted_at: string | null;
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  deleted_at: string | null;
+}
+
+export interface Assignment {
+  id: string;
+  department_id: string;
+  manager_id: string;
+  created_at: string;
+}
+
+export interface UserUpdatePayload {
+  name?: string;
+  role?: string;
+  department_id?: string | null;
+  location_id?: string | null;
+  is_active?: boolean;
 }
 
 export const getMe = async (): Promise<User> => {
@@ -118,6 +150,78 @@ export const createAnswers = async (payload: AnswersBulkCreate): Promise<Answer[
 
 export const updateAnswer = async (id: string, rating: number | null, freeText: string | null): Promise<Answer> => {
   const response = await api.put<Answer>(`/answers/${id}`, { rating, free_text: freeText });
+  return response.data;
+};
+
+export const getLocations = async (): Promise<Location[]> => {
+  const response = await api.get<Location[]>('/locations');
+  return response.data;
+};
+
+export const getAdminLocations = async (): Promise<Location[]> => {
+  const response = await api.get<Location[]>('/admin/locations');
+  return response.data;
+};
+
+export const createLocation = async (name: string): Promise<Location> => {
+  const response = await api.post<Location>('/admin/locations', { name });
+  return response.data;
+};
+
+export const updateLocation = async (id: string, name: string): Promise<Location> => {
+  const response = await api.put<Location>(`/admin/locations/${id}`, { name });
+  return response.data;
+};
+
+export const deleteLocation = async (id: string): Promise<void> => {
+  await api.delete(`/admin/locations/${id}`);
+};
+
+export const getDepartments = async (): Promise<Department[]> => {
+  const response = await api.get<Department[]>('/departments');
+  return response.data;
+};
+
+export const getAdminDepartments = async (): Promise<Department[]> => {
+  const response = await api.get<Department[]>('/admin/departments');
+  return response.data;
+};
+
+export const createDepartment = async (name: string): Promise<Department> => {
+  const response = await api.post<Department>('/admin/departments', { name });
+  return response.data;
+};
+
+export const updateDepartment = async (id: string, name: string): Promise<Department> => {
+  const response = await api.put<Department>(`/admin/departments/${id}`, { name });
+  return response.data;
+};
+
+export const deleteDepartment = async (id: string): Promise<void> => {
+  await api.delete(`/admin/departments/${id}`);
+};
+
+export const getAssignments = async (): Promise<Assignment[]> => {
+  const response = await api.get<Assignment[]>('/assignments');
+  return response.data;
+};
+
+export const createAssignment = async (department_id: string, manager_id: string): Promise<Assignment> => {
+  const response = await api.post<Assignment>('/assignments', { department_id, manager_id });
+  return response.data;
+};
+
+export const deleteAssignment = async (id: string): Promise<void> => {
+  await api.delete(`/assignments/${id}`);
+};
+
+export const getAdminUsers = async (): Promise<User[]> => {
+  const response = await api.get<User[]>('/admin/users');
+  return response.data;
+};
+
+export const updateAdminUser = async (id: string, payload: UserUpdatePayload): Promise<User> => {
+  const response = await api.patch<User>(`/admin/users/${id}`, payload);
   return response.data;
 };
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from app.routers import auth, answers, questions, aggregations
+from app.routers import auth, answers, questions, aggregations, locations, departments, assignments, admin_users
 from app.core.config import settings
 # Ensure all models are imported so they register with SQLAlchemy Base
 from app.models.department import Department
@@ -33,6 +33,10 @@ app.include_router(auth.router)
 app.include_router(answers.router)
 app.include_router(questions.router)
 app.include_router(aggregations.router)
+app.include_router(locations.router)
+app.include_router(departments.router)
+app.include_router(assignments.router)
+app.include_router(admin_users.router)
 
 @app.get("/")
 async def root():
