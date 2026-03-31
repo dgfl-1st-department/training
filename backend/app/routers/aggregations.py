@@ -15,19 +15,6 @@ from app.schemas.aggregations import DepartmentResponse, AggregationResponse, Ag
 
 router = APIRouter(prefix="/api/admin", tags=["admin_aggregations"])
 
-@router.get("/departments", response_model=List[DepartmentResponse])
-async def get_departments(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    # 権限チェック：管理者のみアクセス可能
-    if current_user.role != "admin":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="管理者のみアクセス可能です",
-        )
-    return db.query(Department).all()
-
 @router.get("/aggregations", response_model=AggregationResponse)
 async def get_aggregations(
     request: Request,
