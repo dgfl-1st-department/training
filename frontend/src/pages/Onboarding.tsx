@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { getDepartments, getLocations, patchOnboarding, Department, Location } from '../services/api';
 
-const FirstAccess: React.FC = () => {
+const Onboarding: React.FC = () => {
   const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
-  
+
   const [departments, setDepartments] = useState<Department[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
-  
+
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -120,4 +120,4 @@ const FirstAccess: React.FC = () => {
   );
 };
 
-export default FirstAccess;
+export default Onboarding;
