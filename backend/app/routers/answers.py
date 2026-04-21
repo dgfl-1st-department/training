@@ -1,6 +1,6 @@
+from calendar import monthrange
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 from typing import List, Optional
 from datetime import date
 
@@ -11,6 +11,22 @@ from app.models.user import User
 from app.schemas.answer import AnswersBulkCreate, AnswerUpdate, AnswerResponse
 
 router = APIRouter(prefix="/api/answers", tags=["answers"])
+
+
+def _month_bounds(d: date) -> tuple[date, date]:
+    """同一カレンダー月の初日・末日（date）。"""
+    last = monthrange(d.year, d.month)[1]
+    return date(d.year, d.month, 1), date(d.year, d.month, last)
+
+
+def _question_answer_type_str(question: Question) -> str:
+    """DB/ORM により Enum インスタンスまたは str になる場合があるため統一する。"""
+    v = getattr(question, "answer_type", None)
+    if v is None:
+        return "rating"
+    if isinstance(v, str):
+        return v
+    return getattr(v, "value", str(v))
 
 
 @router.get("", response_model=List[AnswerResponse])
@@ -40,19 +56,55 @@ async def create_answers(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    # 複数質問に対する回答を一括登録。同一日・同一質問は上書き（UPSERT）。
+    """一括登録。同一ユーザー・同一質問・同一月内は別日の2回目を禁止。同一日は UPSERT。"""
     results = []
+    month_start, month_end = _month_bounds(payload.answer_date)
 
     for item in payload.answers:
-        # 質問の存在確認
-        question = db.query(Question).filter(Question.id == item.question_id).first()
+        question = (
+            db.query(Question)
+            .filter(Question.id == item.question_id, Question.deleted_at.is_(None))
+            .first()
+        )
         if not question:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"question_id={item.question_id} は存在しません",
             )
 
-        # 同一ユーザー・同一質問・同一日付の既存回答を検索（UPSERT）
+        # answer_type に応じた必須項目（Issue #35）
+        at = _question_answer_type_str(question)
+        if at == "rating":
+            if item.rating is None or not (1 <= item.rating <= 5):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="レーティング形式の設問には 1〜5 の評価が必須です",
+                )
+        elif at == "free":
+            if item.free_text is None or not str(item.free_text).strip():
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="自由記述形式の設問には本文が必須です",
+                )
+
+        # 同一月内・別日の回答があれば不可（同一日のみ UPSERT 可）
+        in_month = (
+            db.query(Answer)
+            .filter(
+                Answer.user_id == current_user.id,
+                Answer.question_id == item.question_id,
+                Answer.answer_date >= month_start,
+                Answer.answer_date <= month_end,
+            )
+            .all()
+        )
+        for row in in_month:
+            if row.answer_date != payload.answer_date:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="同一月内に既に回答が登録されています。履歴画面からご確認ください。",
+                )
+
         existing = (
             db.query(Answer)
             .filter(
@@ -64,21 +116,22 @@ async def create_answers(
         )
 
         if existing:
-            # 既存レコードを更新
-            if item.rating is not None:
+            if at == "rating":
                 existing.rating = item.rating
-            if item.free_text is not None:
-                existing.free_text = item.free_text
+                if item.free_text is not None:
+                    existing.free_text = item.free_text
+            else:
+                existing.free_text = item.free_text.strip() if item.free_text else None
+                existing.rating = None
             db.flush()
             results.append(existing)
         else:
-            # 新規登録
             new_answer = Answer(
                 user_id=current_user.id,
                 question_id=item.question_id,
                 answer_date=payload.answer_date,
-                rating=item.rating,
-                free_text=item.free_text,
+                rating=item.rating if at == "rating" else None,
+                free_text=(item.free_text.strip() if item.free_text else None) if at == "free" else item.free_text,
             )
             db.add(new_answer)
             db.flush()

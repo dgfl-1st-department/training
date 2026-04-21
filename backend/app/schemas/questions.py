@@ -12,10 +12,6 @@ class AnswerType(str, Enum):
     RATING = "rating"
     FREE = "free"
 
-class AnswerType(str, Enum):
-    RATING = "rating"
-    FREE = "free"
-
 class QuestionItemCreate(BaseModel):
     category: Category
     answer_type: AnswerType = AnswerType.RATING

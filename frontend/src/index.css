@@ -397,6 +397,26 @@ body {
   overflow: hidden;
 }
 
+.alert-info {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  font-size: 0.875rem;
+}
+
+.alert-info-text {
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+a.save-button.alert-info-link {
+  text-decoration: none;
+  display: inline-block;
+}
+
 .progress-bar {
   position: absolute;
   bottom: 0;
