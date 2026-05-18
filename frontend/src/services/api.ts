@@ -21,9 +21,12 @@ export interface User {
 /** バックエンドの Category enum（work / relationship / health）に合わせる */
 export type QuestionCategory = 'work' | 'relationship' | 'health';
 
+export type QuestionAnswerType = 'rating' | 'free';
+
 export interface Question {
   id: string;
   category: QuestionCategory;
+  answer_type: QuestionAnswerType;
   text: string;
   is_public: boolean;
   sort_order: number;
